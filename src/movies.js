@@ -58,21 +58,24 @@ orderAlphabetically = (movies) => {
 
 _turnHoursToMinutes = (x) => {
   if (typeof x === "number") return x
-  const exp = /((\d+)h)?\s*((\d+)min)?/g
+  const exp = /(\d+h)?\s*(\d+min)?/g
   const matches = exp.exec(x)
 
   return parseInt(matches[2] || 0) * 60 + parseInt(matches[4] || 0)
 }
 
-turnHoursToMinutes = (movies) => {
-  let _movies = [...movies].map((x) => {
-    return { ...x, duration: _turnHoursToMinutes(x.duration || 0) }
-  })
-
-  console.log(_movies[0])
-
-  return _movies
-}
+turnHoursToMinutes = (movies) =>
+  [...movies].map((x) => ({
+    ...x,
+    duration: Number(
+      x.duration
+        .toString()
+        .replace(
+          /(\d+h)?\s*(\d+min)?/,
+          (_, h, m) => parseInt(h || 0) * 60 + parseInt(m || 0) || ""
+        )
+    ),
+  }))
 
 getAllYears = (movies) => {
   return Object.keys(
